@@ -23,11 +23,11 @@ class authController {
       const { username, mail, password } = req.body;
       const candidateMail = await User.findOne({ mail });
       if (candidateMail) {
-				return res.status(400).json({ message: `Пользователь с почтой ${mail} уже существует или заблокирован` });
+				return res.status(400).json({ message: `Пользователь с почтой ${mail} уже существует` });
       } 
 			const candidateName = await User.findOne({ username });
 			if (candidateName) {
-				return res.status(400).json({ message: `Пользователь с именем ${username} уже существует или заблокирован` });
+				return res.status(400).json({ message: `Пользователь с именем ${username} уже существует` });
       } 
 			const date = new Date().toLocaleDateString();
       const hashPassword = bcrypt.hashSync(password, 4);
@@ -50,8 +50,8 @@ class authController {
 			if (!user) {
 					return res.status(400).json({message: `Пользователь ${username} не найден`})
 			}
-			if (!(roles = true)) {																															//Работу этих строк не проверял, должно работать
-				return res.status(400).json({message: `Пользователь ${username} заблокирован`})		//Работу этих строк не проверял, должно работать
+			if (!(user.roles == 'true')) {																															
+				return res.status(400).json({message: `Пользователь ${username} заблокирован`})		
 		}
 			const validPassword = bcrypt.compareSync(password, user.password)
 			if (!validPassword) {
